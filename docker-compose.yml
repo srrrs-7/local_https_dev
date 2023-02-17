@@ -1,37 +1,11 @@
-version: "3.9"
-
+version: "3"
 services:
   nginx:
-    container_name: nginx
-    image: nginx-alpine
+    image: nginx:latest
     ports:
-      - 80:80
-      - 443:443
-    environment:
-      # default receive
-      - DEFAULT_HOST:"default.local.localhost"
+      - "80:80"
+      - "443:443"
     volumes:
-      - /var/run/docker.sock:/tmp/docker.sock:ro
-      # mkcert directory
-      - ./certs:/etc/nginx/certs
-      # reverse proxy default configuration
-      - ./conf/my-default.conf:/etc/nginx/conf.d/my-default.conf
-    networks:
-      - local-network
-    restart: always
-
-  apache:
-    container_name: apache-defaut
-    image: httpd-alpine
-    environment:
-      - VIRTUAL_HOST:"default.local.localhost"
-      - CERT_NAME:"_wildcard.local.localhost"
-      - HTTPS_METHOD:"noredirect"
-    volumes:
-      - ./htdocs:/usr/local/apache2/htdocs
-    networks:
-      - local-network
-    restart: always
-networks:
-  local-netowrks:
-    name: local-netowrks
+      - ./conf/nginx.conf:/etc/nginx/nginx.conf
+      - ./certs:/etc/ssl/certs
+      - ./html:/usr/share/nginx/html
